@@ -1,0 +1,21 @@
+services:
+  oracle-xe:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: telco-oracle-xe
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: "Oracle_123"
+      APP_USER: "telco"
+      APP_USER_PASSWORD: "Telco_123"
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./TABLE_CREATION_SCRIPTS.sql:/container-entrypoint-initdb.d/01-table-creation.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  oracle-data:
